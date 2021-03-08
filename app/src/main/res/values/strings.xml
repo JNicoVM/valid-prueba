@@ -3,4 +3,10 @@
     <string name="hint_email">email...</string>
     <string name="hint_password">password...</string>
     <string name="btn_log_in">Log in</string>
+    <string name="btn_top_artists">Top Artists</string>
+    <string name="btn_top_tracks">Top cracks</string>
+    <string name="haz_tu_consulta_aqui">What would you like to search....</string>
+    <string name="no_se_ha_encontrada_datos">There is not data, Try one more time.</string>
+    <string name="Nombre">Nombre</string>
+    <string name="Nada">Nada</string>
 </resources>

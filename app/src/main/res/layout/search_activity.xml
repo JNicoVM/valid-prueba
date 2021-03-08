@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SearchActivity">
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinnerServicios"
+        style="@style/Widget.AppCompat.Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/dropdownListPreferredItemHeight"
+        android:layout_marginStart="@dimen/_8dp"
+        android:layout_marginTop="@dimen/_8dp"
+        android:layout_marginEnd="@dimen/_8dp"
+        android:background="@drawable/spinner_bg"
+        android:dropDownWidth="@dimen/_300dp"
+        android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+        android:paddingEnd="@dimen/_14dp"
+        android:paddingStart="@dimen/_10dp"
+        android:popupBackground="@android:color/white"
+        android:popupElevation="@dimen/_3dp"
+        android:stateListAnimator="@animator/spinner_sla"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+<!--    <androidx.appcompat.widget.AppCompatEditText-->
+<!--        android:id="@+id/etSearch"-->
+<!--        android:layout_width="@dimen/_0dp"-->
+<!--        android:layout_height="@dimen/_50dp"-->
+<!--        android:drawablePadding="@dimen/_32dp"-->
+<!--        android:hint="@string/haz_tu_consulta_aqui"-->
+<!--        android:layout_marginStart="@dimen/_8dp"-->
+<!--        android:singleLine="true"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/btn_buscar"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/rvItems"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/spinnerFiltro" />-->
+
+
+    <ImageButton
+        android:id="@+id/btnBuscar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:layout_marginStart="@dimen/_8dp"
+        android:layout_marginTop="@dimen/_8dp"
+        android:layout_marginEnd="@dimen/_8dp"
+        android:src="@drawable/ic_search"
+        app:layout_constraintTop_toBottomOf="@id/spinnerServicios"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvItems"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBuscar" />
+
+    <TextView
+        android:id="@+id/noData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_50dp"
+        android:text="@string/no_se_ha_encontrada_datos"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvItems" />
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/contentLoadingProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="?android:attr/progressBarStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        android:background="@color/blanco_opacidad_90"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/dimens_140dp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
