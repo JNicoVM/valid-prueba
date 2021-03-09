@@ -2,6 +2,11 @@ package com.example.valid_prueba.models.response
 
 import com.google.gson.annotations.SerializedName
 
+data class TopArtistsSearchResponse(
+    @SerializedName("@attr")
+    val attrResponse : AttrResponse
+)
+
 data class TopArtistsResponse(
     @SerializedName("name")
     val name : String,
@@ -18,4 +23,9 @@ data class TopArtistsResponse(
 data class ImageResponse(
     @SerializedName("#text")
     val imageUrl : String
+)
+
+data class AttrResponse(
+    @SerializedName("totalPages")
+    val totalPages : String
 )

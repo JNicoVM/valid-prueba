@@ -6,12 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.valid_prueba.models.request.TopArtistsRequest
 import com.example.valid_prueba.models.response.TopArtistsResponse
+import com.example.valid_prueba.models.response.TopArtistsSearchResponse
 import com.example.valid_prueba.retrofit.APIConstants.API_KEY
 import com.example.valid_prueba.useCases.GetAllTopArtistsUseCase
 import com.example.valid_prueba.utils.APPConstants.COUNTRY_CO
-import com.example.valid_prueba.utils.APPConstants.PAGE_SIZE
+import com.example.valid_prueba.utils.APPConstants.PAGE_LIMIT
 import com.example.valid_prueba.utils.APPConstants.TOP_ARTISTS
 import com.example.valid_prueba.utils.APPConstants.TOP_TRACKS
+import com.example.valid_prueba.utils.notifyObserver
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import io.reactivex.disposables.CompositeDisposable
@@ -26,6 +28,7 @@ class SearchViewmodel(
 
     private var currentPage = 1
     private var isLastPage = false
+    private var isLoading = false
 
     fun getService() = service as LiveData<String>
 
@@ -34,29 +37,42 @@ class SearchViewmodel(
     }
 
     // Se crean la variable livedata y mutablelivedata para que la información persista con el ciclo de vida de la aplicación
-    private val _searchValues: MutableLiveData<List<TopArtistsResponse>> = MutableLiveData()
-    val searchValues: LiveData<List<TopArtistsResponse>> get() = _searchValues
+    private val _searchValues: MutableLiveData<TopArtistsSearchResponse> = MutableLiveData()
+//    val searchValues: LiveData<TopArtistsSearchResponse> get() = _searchValues
+
+    // Se crean la variable livedata y mutablelivedata para que la información persista con el ciclo de vida de la aplicación
+    private val _listArtists: MutableLiveData<MutableList<TopArtistsResponse>> = MutableLiveData()
+    val listArtists: LiveData<MutableList<TopArtistsResponse>> get() = _listArtists
+
+    init {
+        _listArtists.value = ArrayList()
+    }
 
     fun performSearch(){
         when(getService().value){
             TOP_ARTISTS -> searchTopArtists()
             TOP_TRACKS -> searchTopTracks()
         }
-
     }
 
     private fun searchTopArtists(){
         disposable.add(
             getAllTopArtistsUseCase
-                .invoke(TopArtistsRequest(country = COUNTRY_CO, apiKey = API_KEY, page = PAGE_SIZE))
+                .invoke(TopArtistsRequest(country = COUNTRY_CO, apiKey = API_KEY, limit = PAGE_LIMIT.toString(), page = currentPage))
+                .doOnSubscribe { showLoading() }
                 .subscribe{
                     try {
                         // parseando json de respuesta a SearchRespone
-                        _searchValues.postValue(Gson().fromJson((it["topartists"] as JsonObject).get("artist"), (Array<TopArtistsResponse>::class.java)).toList())
-                        if (_searchValues.value?.size!! < PAGE_SIZE) {
+                        _searchValues.postValue(Gson().fromJson(it["topartists"], TopArtistsSearchResponse::class.java))
+                        val parsinArtists = Gson().fromJson((it["topartists"] as JsonObject).get("artist"), (Array<TopArtistsResponse>::class.java)).toList()
+                        _listArtists.value?.addAll(parsinArtists)
+                        _listArtists.notifyObserver()
+                        if (parsinArtists.size <  PAGE_LIMIT) {
                             isLastPage = true
                         }
+                        hideLoading()
                     }catch (error: Exception){
+                        hideLoading()
                         Log.e("EParcing", error.toString())
                     }
                 }
@@ -67,8 +83,16 @@ class SearchViewmodel(
 
     }
 
+    private fun showLoading() {
+        isLoading = true
+    }
+
+    private fun hideLoading() {
+        isLoading = false
+    }
+
     fun onLoadMoreItems(visibleItemCount: Int, firstVisibleItemPosition: Int, totalItemCount: Int) {
-        if (isLastPage || !isInFooter(visibleItemCount, firstVisibleItemPosition, totalItemCount)) {
+        if (isLoading ||isLastPage || !isInFooter(visibleItemCount, firstVisibleItemPosition, totalItemCount)) {
             return
         }
 
@@ -83,7 +107,7 @@ class SearchViewmodel(
     ): Boolean {
         return visibleItemCount + firstVisibleItemPosition >= totalItemCount
                 && firstVisibleItemPosition >= 0
-                && totalItemCount >= PAGE_SIZE
+                && totalItemCount >= PAGE_LIMIT
     }
 
     // limpiando disposable
@@ -91,4 +115,8 @@ class SearchViewmodel(
         super.onCleared()
         disposable.clear()
     }
+
+
 }
+
+

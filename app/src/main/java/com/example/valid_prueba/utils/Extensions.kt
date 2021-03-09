@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
@@ -17,6 +18,10 @@ fun Context.showLongToast(message: String){
 
 fun Context.showLongToast(@StringRes resourceId: Int){
     Toast.makeText(this, resourceId, Toast.LENGTH_LONG).show()
+}
+
+fun <T> MutableLiveData<T>.notifyObserver() {
+    this.postValue(value)
 }
 
 @Suppress("UNCHECKED_CAST")

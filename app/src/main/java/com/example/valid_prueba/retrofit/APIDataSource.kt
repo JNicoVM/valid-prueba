@@ -38,7 +38,7 @@ class SearchRetrofitDataSource(
 
     override fun perfomSearchTopArtists(topArtistsRequest: TopArtistsRequest): Observable<JsonObject> {
         return configuracionRx(requestTopArtists.interfazApi
-            .doSearchTopArtists(topArtistsRequest.country, topArtistsRequest.apiKey))
+            .doSearchTopArtists(topArtistsRequest.country, topArtistsRequest.apiKey, topArtistsRequest.limit, topArtistsRequest.page.toString()))
 
     }
 

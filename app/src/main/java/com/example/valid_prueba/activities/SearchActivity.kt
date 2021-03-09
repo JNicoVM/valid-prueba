@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.valid_prueba.R
@@ -67,7 +66,7 @@ class SearchActivity : BaseActivity() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val visibleItemCount: Int = layoutManager.childCount
                 val totalItemCount: Int = layoutManager.itemCount
                 val firstVisibleItemPosition: Int = layoutManager.findFirstVisibleItemPosition()
@@ -106,7 +105,7 @@ class SearchActivity : BaseActivity() {
     // Se inicializan los diferentes tipos de listeners que va a estar trabajando a lo largo de la vida de la actividad
     private fun initListeners() {
         //El escuchador de la variable searchValues declarada como livedata
-        searchViewmodel.searchValues.observe(this, {
+        searchViewmodel.listArtists.observe(this, {
             ocultarProgressBar()
             //Se carga la lista de elementos en el adaptador
             loadAdapter(it)
@@ -144,10 +143,14 @@ class SearchActivity : BaseActivity() {
                 }
             }
 
-//        binding.rvItems.run {
-//            addOnScrollListener(onScrollListener)
-//            adapter = artistAdapter
-//        }
+        binding.rvItems.run {
+            addOnScrollListener(onScrollListener)
+            adapter = artistAdapter
+        }
+
+        artistAdapter.onUserClicked {
+
+        }
     }
 
     //Se carga la lista que llega del servicio en el adaptador
